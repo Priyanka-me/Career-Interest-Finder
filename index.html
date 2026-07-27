@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Interest Finder</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        /* Stream Selection Styles */
+        .grid-streams {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-stream {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-stream:hover {
+            border-color: var(--primary);
+            background: #e0e7ff;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Card Section Styles */
+        .progress-bar {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background-color: #f1f5f9;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        .actions-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-love {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 2px solid #bbf7d0;
+        }
+
+        .btn-love:hover {
+            background-color: #bbf7d0;
+            transform: translateY(-2px);
+        }
+
+        .btn-not {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 2px solid #fecaca;
+        }
+
+        .btn-not:hover {
+            background-color: #fecaca;
+            transform: translateY(-2px);
+        }
+
+        /* Result Screen Styles */
+        .result-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--primary);
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .degree-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .degree-box h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .degree-box ul {
+            list-style-position: inside;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn-restart {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-restart:hover {
+            background: var(--primary-hover);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Career Interest Finder</h1>
+        <p class="subtitle" id="sub-heading">Discover your natural career vibe in 3 minutes.</p>
+
+        <!-- STEP 1: Stream Selection Screen -->
+        <div id="screen-stream">
+            <div class="grid-streams">
+                <button class="btn-stream" onclick="startTest('PCB')">PCB</button>
+                <button class="btn-stream" onclick="startTest('PCM')">PCM</button>
+                <button class="btn-stream" onclick="startTest('Commerce')">Commerce</button>
+                <button class="btn-stream" onclick="startTest('Arts')">Arts</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: Cards Swiping Screen -->
+        <div id="screen-cards" class="hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="card-img-wrapper">
+                <img id="card-img" src="" alt="Work Vibe">
+            </div>
+
+            <div class="card-title" id="card-title">Loading...</div>
+            <div class="card-description" id="card-desc">...</div>
+
+            <div class="actions-group">
+                <button class="btn-action btn-not" onclick="handleChoice(false)">✖ Not for Me</button>
+                <button class="btn-action btn-love" onclick="handleChoice(true)">❤️ Love the Vibe</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: Result Display Screen -->
+        <div id="screen-result" class="hidden">
+            <span class="result-badge">Top Match Found</span>
+            <h2 class="result-title" id="res-cluster">...</h2>
+            <p class="card-description" id="res-desc">...</p>
+
+            <div class="degree-box">
+                <h4>RECOMMENDED DEGREE TRACKS:</h4>
+                <ul id="res-degrees"></ul>
+            </div>
+
+            <button class="btn-restart" onclick="restart()">Try Another Stream</button>
+        </div>
+    </div>
+
+    <script>
+        // Database of stream-specific clusters, images, and descriptions
+        const cardDatabase = {
+            PCB: [
+                {
+                    cluster: "Clinical Medicine & Patient Care",
+                    title: "Medical & Healthcare Operations",
+                    desc: "Working in hospitals or clinics, diagnosing health conditions, and treating patients directly.",
+                    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["MBBS", "BDS (Dental)", "BAMS / BHMS", "B.Sc Nursing"]
+                },
+                {
+                    cluster: "Clinical Medicine & Patient Care",
+                    title: "Diagnostic & Surgical Practice",
+                    desc: "Performing surgeries, analyzing patient reports, and managing critical healthcare procedures.",
+                    img: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["MBBS Specialization", "B.Sc Medical Lab Tech"]
+                },
+                {
+                    cluster: "Biotech & Research Labs",
+                    title: "Genetics & Laboratory Science",
+                    desc: "Conducting experiments with DNA, microorganisms, and biological samples in sterile research labs.",
+                    img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Biotechnology", "B.Sc Microbiology", "B.Tech Bioprocess Engineering"]
+                },
+                {
+                    cluster: "Biotech & Research Labs",
+                    title: "Pharmaceutical Development",
+                    desc: "Formulating new medicines, vaccines, and testing chemical compounds for global health.",
+                    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Pharmacy", "Pharm.D", "B.Sc Chemistry/Biochemistry"]
+                },
+                {
+                    cluster: "Psychology & Behavioral Science",
+                    title: "Mental Health & Counseling",
+                    desc: "Helping individuals overcome mental health challenges, stress, and behavioral issues through therapy.",
+                    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA / B.Sc Psychology", "Clinical Psychology Diploma"]
+                },
+                {
+                    cluster: "Psychology & Behavioral Science",
+                    title: "Neuroscience & Mind Wellness",
+                    desc: "Studying human brain patterns, cognitive function, and emotional behavior systems.",
+                    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Cognitive Science", "B.Sc Behavioral Psychology"]
+                },
+                {
+                    cluster: "Allied Health & Diagnostic Technology",
+                    title: "Radiology & Medical Imaging",
+                    desc: "Operating complex MRI, CT scan, and X-ray machinery to detect internal health issues.",
+                    img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Radiology & Imaging", "B.Sc Cardiac Technology"]
+                },
+                {
+                    cluster: "Allied Health & Diagnostic Technology",
+                    title: "Physiotherapy & Rehabilitation",
+                    desc: "Helping patients recover from sports injuries and physical disabilities through movement therapy.",
+                    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BPT (Bachelor of Physiotherapy)", "B.Sc Occupational Therapy"]
+                },
+                {
+                    cluster: "Nutrition & Agri-Tech",
+                    title: "Dietetics & Food Science",
+                    desc: "Designing personalized health diet plans and creating scientific food safety formulations.",
+                    img: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Nutrition & Dietetics", "B.Tech Food Technology"]
+                },
+                {
+                    cluster: "Nutrition & Agri-Tech",
+                    title: "Smart Agriculture & Bio-farming",
+                    desc: "Using modern technology, green science, and automation to improve food crop production.",
+                    img: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Agriculture (Hons)", "B.Tech Agricultural Engineering"]
+                }
+            ],
+            PCM: [
+                {
+                    cluster: "Software, AI & Data Engineering",
+                    title: "App & Web Development",
+                    desc: "Writing modern computer code to build scalable websites, smartphone apps, and digital platforms.",
+                    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Computer Science", "BCA", "B.Sc Computer Science"]
+                },
+                {
+                    cluster: "Software, AI & Data Engineering",
+                    title: "AI & Machine Learning",
+                    desc: "Training artificial intelligence algorithms and building automation systems that think intelligently.",
+                    img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech AI & Data Science", "B.Sc Data Science"]
+                },
+                {
+                    cluster: "Core Hardware & Robotics",
+                    title: "Robotics & Automation",
+                    desc: "Designing electronic circuits, robotic arms, and hardware controllers for automated systems.",
+                    img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Mechanical / Mechatronics", "B.Tech Electrical Engineering"]
+                },
+                {
+                    cluster: "Core Hardware & Robotics",
+                    title: "Embedded Systems & Electronics",
+                    desc: "Building computer microchips, Internet of Things (IoT) hardware, and circuit boards.",
+                    img: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Electronics & Communication (ECE)", "B.Sc Electronics"]
+                },
+                {
+                    cluster: "Architecture & Structural Design",
+                    title: "Architectural Planning",
+                    desc: "Designing 3D building models, urban city layouts, and modern aesthetic living structures.",
+                    img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Arch (Bachelor of Architecture)", "B.Des Interior Design"]
+                },
+                {
+                    cluster: "Architecture & Structural Design",
+                    title: "Civil & Infrastructure Engineering",
+                    desc: "Supervising the construction of massive bridges, smart highways, and modern skyscrapers.",
+                    img: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Civil Engineering", "B.Plan (Urban Planning)"]
+                },
+                {
+                    cluster: "Data Analytics & Financial Math",
+                    title: "Statistical & Predictive Analytics",
+                    desc: "Using advanced mathematics and code to find hidden patterns in complex global data.",
+                    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Statistics", "B.Math", "B.Tech Data Analytics"]
+                },
+                {
+                    cluster: "Data Analytics & Financial Math",
+                    title: "Quantitative Finance & Modeling",
+                    desc: "Applying mathematical formulas to predict stock market movements and manage financial risk.",
+                    img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Sc Actuarial Science", "BS Mathematical Sciences"]
+                },
+                {
+                    cluster: "Aerospace & Automotive Engineering",
+                    title: "Aircraft & Space Technology",
+                    desc: "Designing flight aerodynamics, rockets, satellites, and next-generation space exploration systems.",
+                    img: "https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Aerospace / Aeronautical", "B.Tech Avionics"]
+                },
+                {
+                    cluster: "Aerospace & Automotive Engineering",
+                    title: "Electric Vehicles & Supercars",
+                    desc: "Developing high-speed battery engines, EV powertrains, and aerodynamic car bodies.",
+                    img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Tech Automobile Engineering", "B.Tech Mechanical"]
+                }
+            ],
+            Commerce: [
+                {
+                    cluster: "Corporate Finance & Valuation",
+                    title: "Financial Analysis & Valuation",
+                    desc: "Evaluating company balance sheets, calculating profit models, and preparing financial statements.",
+                    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Com Finance / Hons", "BBA Finance", "CA / CFA Pathway"]
+                },
+                {
+                    cluster: "Corporate Finance & Valuation",
+                    title: "Investment Banking & Markets",
+                    desc: "Managing stock market portfolios, multi-crore investment deals, and venture funds.",
+                    img: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BFM (Bachelor of Financial Markets)", "BBA Financial Analyst"]
+                },
+                {
+                    cluster: "Business Strategy & Management",
+                    title: "Startup Leadership & Operations",
+                    desc: "Managing corporate strategy, scaling business models, and coordinating multi-department teams.",
+                    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA (General / International)", "BMS (Management Studies)"]
+                },
+                {
+                    cluster: "Business Strategy & Management",
+                    title: "Corporate Consulting & Planning",
+                    desc: "Helping global companies solve business problems, cut operational costs, and grow revenues.",
+                    img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA Entrepreneurship", "B.Com Management"]
+                },
+                {
+                    cluster: "Digital Marketing & Growth",
+                    title: "Brand Strategy & Advertising",
+                    desc: "Planning viral ad campaigns, social media strategies, and positioning products in consumer markets.",
+                    img: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA Marketing", "BMM (Mass Media)", "B.Sc Digital Marketing"]
+                },
+                {
+                    cluster: "Digital Marketing & Growth",
+                    title: "E-Commerce & Performance Ads",
+                    desc: "Analyzing click conversion rates, running online ad campaigns, and optimizing online sales funnels.",
+                    img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA E-Commerce", "B.Com Marketing Tech"]
+                },
+                {
+                    cluster: "Auditing, Tax & Compliance",
+                    title: "Taxation & Forensic Accounting",
+                    desc: "Verifying financial records, ensuring tax legal compliance, and auditing company accounts.",
+                    img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Com Accounting & Finance (BAF)", "CA / CS Foundation"]
+                },
+                {
+                    cluster: "Auditing, Tax & Compliance",
+                    title: "Corporate Law & Secretarial Practice",
+                    desc: "Ensuring business deals comply with government corporate law and regulatory policies.",
+                    img: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["Company Secretary (CS)", "Integrated BBA LLB"]
+                },
+                {
+                    cluster: "Supply Chain & Business Analytics",
+                    title: "Logistics & Global Supply Chain",
+                    desc: "Managing shipping logistics, warehouse operations, and product delivery networks worldwide.",
+                    img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA Logistics & Supply Chain", "B.Com Operations"]
+                },
+                {
+                    cluster: "Supply Chain & Business Analytics",
+                    title: "E-Business Data Intelligence",
+                    desc: "Using dashboard software like Tableau and Excel to track sales growth and customer trends.",
+                    img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA Business Analytics", "B.Sc Analytics"]
+                }
+            ],
+            Arts: [
+                {
+                    cluster: "UI/UX & Digital Design",
+                    title: "App & Interface Design (UI/UX)",
+                    desc: "Creating visually attractive screens, button layouts, and smooth user experiences for mobile apps.",
+                    img: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Des Interaction / UI-UX", "B.Sc Visual Communication"]
+                },
+                {
+                    cluster: "UI/UX & Digital Design",
+                    title: "Graphic & Brand Identity Design",
+                    desc: "Designing creative logos, brand color themes, typography, and visual marketing assets.",
+                    img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["B.Des Graphic Design", "BA Fine Arts (BFA)"]
+                },
+                {
+                    cluster: "Media, Journalism & Content Creation",
+                    title: "Video Editing & Film Production",
+                    desc: "Editing high-energy video content, directing studio shoots, and managing multimedia production.",
+                    img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA Film Making & Editing", "BMM (Mass Media)"]
+                },
+                {
+                    cluster: "Media, Journalism & Content Creation",
+                    title: "Journalism & Digital Publishing",
+                    desc: "Investigating news stories, writing articles, and broadcasting stories to public audiences.",
+                    img: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA Journalism & Mass Comm", "BA English Literature"]
+                },
+                {
+                    cluster: "Human Resources & Organizational Psychology",
+                    title: "Corporate Recruitment & Culture",
+                    desc: "Interviewing candidates, conducting onboarding sessions, and managing workplace culture.",
+                    img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA Human Resource Mgmt", "BBA HR", "BA Psychology"]
+                },
+                {
+                    cluster: "Human Resources & Organizational Psychology",
+                    title: "Corporate Training & Coaching",
+                    desc: "Hosting leadership workshops, developing soft skills programs, and training corporate employees.",
+                    img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA Industrial Psychology", "BA Applied Psychology"]
+                },
+                {
+                    cluster: "Law, Governance & Public Policy",
+                    title: "Legal Advocacy & Corporate Law",
+                    desc: "Analyzing legal cases, drafting legal contracts, and defending clients in judicial courts.",
+                    img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA LLB (5-Year Integrated)", "BBA LLB"]
+                },
+                {
+                    cluster: "Law, Governance & Public Policy",
+                    title: "Civil Services & Public Policy",
+                    desc: "Researching social issues, designing government policies, and leading administrative public services.",
+                    img: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BA Political Science", "BA Public Administration", "BA Economics"]
+                },
+                {
+                    cluster: "Hospitality & Event Management",
+                    title: "Large-Scale Event Management",
+                    desc: "Organizing massive concerts, corporate conventions, weddings, and backstage logistics operations.",
+                    img: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BBA Event Management", "BA Tourism & Travel"]
+                },
+                {
+                    cluster: "Hospitality & Event Management",
+                    title: "Luxury Hotel & Resort Operations",
+                    desc: "Managing luxury customer experiences, international hotel chains, and premium hospitality services.",
+                    img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
+                    degrees: ["BHM (Bachelor of Hotel Mgmt)", "B.Sc Hospitality"]
+                }
+            ]
+        };
+
+        // State Tracking
+        let currentStreamCards = [];
+        let currentIndex = 0;
+        let clusterScores = {};
+
+        function startTest(stream) {
+            currentStreamCards = cardDatabase[stream];
+            currentIndex = 0;
+            clusterScores = {};
+
+            // Initialize scores for all clusters in this stream to 0
+            currentStreamCards.forEach(card => {
+                clusterScores[card.cluster] = 0;
+            });
+
+            // UI Adjustments
+            document.getElementById('screen-stream').classList.add('hidden');
+            document.getElementById('screen-cards').classList.remove('hidden');
+            document.getElementById('sub-heading').innerText = stream + " Vibe Check: React to each environment.";
+
+            showCard();
+        }
+
+        function showCard() {
+            if (currentIndex >= currentStreamCards.length) {
+                renderResult();
+                return;
+            }
+
+            const card = currentStreamCards[currentIndex];
+            document.getElementById('card-img').src = card.img;
+            document.getElementById('card-title').innerText = card.title;
+            document.getElementById('card-desc').innerText = card.desc;
+
+            // Update Progress Bar
+            const progress = ((currentIndex) / currentStreamCards.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        function handleChoice(isLoved) {
+            const currentCard = currentStreamCards[currentIndex];
+            if (isLoved) {
+                clusterScores[currentCard.cluster] += 1;
+            }
+
+            currentIndex++;
+            showCard();
+        }
+
+        function renderResult() {
+            document.getElementById('screen-cards').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+            document.getElementById('sub-heading').innerText = "Your career direction is ready!";
+
+            // Find cluster with highest score
+            let topCluster = "";
+            let maxScore = -1;
+
+            for (const cluster in clusterScores) {
+                if (clusterScores[cluster] > maxScore) {
+                    maxScore = clusterScores[cluster];
+                    topCluster = cluster;
+                }
+            }
+
+            // Find matching degrees for this top cluster from card database
+            const winningSample = currentStreamCards.find(c => c.cluster === topCluster);
+
+            document.getElementById('res-cluster').innerText = topCluster;
+            document.getElementById('res-desc').innerText = `You reacted most positively to visual environments in ${topCluster}. You naturally enjoy tasks and vibes in this domain.`;
+
+            const degreeList = document.getElementById('res-degrees');
+            degreeList.innerHTML = "";
+            winningSample.degrees.forEach(deg => {
+                const li = document.createElement('li');
+                li.innerText = deg;
+                degreeList.appendChild(li);
+            });
+        }
+
+        function restart() {
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-stream').classList.remove('hidden');
+            document.getElementById('sub-heading').innerText = "Discover your natural career vibe in 3 minutes.";
+            document.getElementById('progress-fill').style.width = '0%';
+        }
+    </script>
+</body>
+</html>

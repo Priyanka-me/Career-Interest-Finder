@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #1e1b4b, #0f172a, #030712);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Outer Box */
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 32px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        /* Colorful Stream Selection Grid */
+        .grid-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .btn-stream {
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 24px 16px;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-stream:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Vibrant Gradients for Stream Buttons */
+        .btn-stream.pcb {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+        .btn-stream.pcm {
+            background: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
+        }
+        .btn-stream.comm {
+            background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+        }
+        .btn-stream.arts {
+            background: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
+        }
+
+        /* Cards & Progress UI */
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38bdf8, #a855f7);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .card {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            margin-bottom: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        /* Interactive Like / Pass Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 16px;
+            border-radius: 18px;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-action:active {
+            transform: scale(0.95);
+        }
+
+        .btn-dislike {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-dislike:hover {
+            box-shadow: 0 12px 25px rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-like {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-like:hover {
+            box-shadow: 0 12px 25px rgba(34, 197, 94, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Results Screen */
+        .result-box {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 22px;
+            padding: 26px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            background: linear-gradient(90deg, #38bdf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .result-desc {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .degree-list {
+            list-style-type: none;
+        }
+
+        .degree-list li {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .degree-list li::before {
+            content: "✦";
+            color: #38bdf8;
+            font-size: 1.1rem;
+        }
+
+        /* Special Alert styling when student passes everything */
+        .all-pass-box {
+            border-color: rgba(239, 68, 68, 0.5) !important;
+            background: rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .all-pass-box .result-title {
+            background: linear-gradient(90deg, #f87171, #fb923c) !important;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>Career Vibe Check</h1>
+        <p class="subtitle" id="sub-heading">Discover your natural career path in 3 minutes.</p>
+    </header>
+
+    <!-- SCREEN 1: STREAM SELECTION -->
+    <div id="screen-stream" class="grid-select">
+        <button class="btn-stream pcb" onclick="startTest('PCB')">PCB<br><span style="font-size: 0.8rem; opacity: 0.9; font-weight: 500;">Biology</span></button>
+        <button class="btn-stream pcm" onclick="startTest('PCM')">PCM<br><span style="font-size: 0.8rem; opacity: 0.9; font-weight: 500;">Maths</span></button>
+        <button class="btn-stream comm" onclick="startTest('Commerce')">Commerce<br><span style="font-size: 0.8rem; opacity: 0.9; font-weight: 500;">Finance</span></button>
+        <button class="btn-stream arts" onclick="startTest('Arts')">Arts<br><span style="font-size: 0.8rem; opacity: 0.9; font-weight: 500;">Humanities</span></button>
+    </div>
+
+    <!-- SCREEN 2: CARD SWIPING -->
+    <div id="screen-cards" class="hidden" style="width: 100%;">
+        <div class="progress-bar-container">
+            <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-img-wrapper">
+                <img id="card-img" src="" alt="Workplace Scenario">
+            </div>
+            <div class="card-body">
+                <div id="card-title" class="card-title"></div>
+                <div id="card-desc" class="card-desc"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-action btn-dislike" onclick="handleChoice(false)">✖ Pass</button>
+            <button class="btn-action btn-like" onclick="handleChoice(true)">♥ Like</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: RESULTS (No Retake Option Included) -->
+    <div id="screen-result" class="hidden" style="width: 100%;">
+        <div id="result-card-box" class="result-box">
+            <div id="res-cluster" class="result-title"></div>
+            <div id="res-desc" class="result-desc"></div>
+            
+            <div id="degree-section">
+                <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Recommended Pathways:</p>
+                <ul id="res-degrees" class="degree-list"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cardDatabase = {
+        PCB: [
+            {
+                cluster: "Clinical Medicine & Patient Care",
+                title: "Doctor & Hospital Care",
+                desc: "Working directly with patients, reading scans, and prescribing medical treatments.",
+                img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=600&q=80",
+                degrees: ["MBBS", "BDS (Dental)", "BAMS / BHMS", "B.Sc Nursing"]
+            },
+            {
+                cluster: "Biotech & Research Labs",
+                title: "Lab Scientist & Geneticist",
+                desc: "Testing DNA, analyzing molecular samples, and conducting biological research.",
+                img: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Sc Biotechnology", "B.Sc Microbiology", "B.Tech Bioprocess Engineering"]
+            },
+            {
+                cluster: "Psychology & Behavioral Science",
+                title: "Counselor & Clinical Psychologist",
+                desc: "Conducting therapy sessions and helping individuals improve mental health.",
+                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+                degrees: ["BA / B.Sc Psychology", "M.Sc Clinical Psychology"]
+            }
+        ],
+        PCM: [
+            {
+                cluster: "Software, AI & Data Engineering",
+                title: "Software Developer & Coder",
+                desc: "Writing code, building web platforms, mobile applications, and system databases.",
+                img: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Tech Computer Science", "BCA", "B.Sc Computer Science"]
+            },
+            {
+                cluster: "Core Hardware & Robotics",
+                title: "Robotics & Automation Engineer",
+                desc: "Assembling robotic components, circuits, and testing automated systems.",
+                img: "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Tech Robotics", "B.Tech Mechanical", "B.Tech Electrical"]
+            },
+            {
+                cluster: "Architecture & Structural Design",
+                title: "Architect & Building Designer",
+                desc: "Creating structural floor plans, 3D design models, and modern urban structures.",
+                img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Arch (Architecture)", "B.Des Interior Design"]
+            }
+        ],
+        Commerce: [
+            {
+                cluster: "Corporate Finance & Valuation",
+                title: "Financial Analyst & Investment Specialist",
+                desc: "Evaluating financial markets, managing stock portfolios, and building company growth models.",
+                img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Com Finance / Hons", "BBA Finance", "CA / CFA Pathway"]
+            },
+            {
+                cluster: "Business Strategy & Management",
+                title: "Startup Lead & Entrepreneur",
+                desc: "Planning business operations, leading corporate teams, and pitching ideas.",
+                img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80",
+                degrees: ["BBA", "BMS (Management Studies)"]
+            },
+            {
+                cluster: "Digital Marketing & Growth",
+                title: "Digital Marketer & Campaign Director",
+                desc: "Designing online marketing funnels, managing social advertising, and growth strategies.",
+                img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+                degrees: ["BBA Marketing", "BMM (Mass Media)"]
+            }
+        ],
+        Arts: [
+            {
+                cluster: "UI/UX & Digital Design",
+                title: "UI/UX & Visual Designer",
+                desc: "Designing intuitive smartphone screens, digital interfaces, and visual media.",
+                img: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=600&q=80",
+                degrees: ["B.Des Interaction / UI-UX", "B.Sc Visual Communication"]
+            },
+            {
+                cluster: "Media & Film Creation",
+                title: "Video Editor & Director",
+                desc: "Directing scenes, editing video footage, and producing digital media content.",
+                img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80",
+                degrees: ["BA Film Making & Editing", "BMM (Mass Media)"]
+            },
+            {
+                cluster: "Law & Public Policy",
+                title: "Lawyer & Legal Counselor",
+                desc: "Analyzing legal cases, drafting documents, and representing clients in court.",
+                img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+                degrees: ["BA LLB (5-Year Integrated)", "BBA LLB"]
+            }
+        ]
+    };
+
+    let currentStreamCards = [];
+    let currentIndex = 0;
+    let clusterScores = {};
+    let totalLikes = 0;
+
+    function startTest(stream) {
+        currentStreamCards = cardDatabase[stream];
+        currentIndex = 0;
+        totalLikes = 0;
+        clusterScores = {};
+
+        currentStreamCards.forEach(card => {
+            clusterScores[card.cluster] = 0;
+        });
+
+        document.getElementById('screen-stream').classList.add('hidden');
+        document.getElementById('screen-cards').classList.remove('hidden');
+        document.getElementById('sub-heading').innerText = stream + " Track: React to each environment.";
+
+        showCard();
+    }
+
+    function showCard() {
+        if (currentIndex >= currentStreamCards.length) {
+            renderResult();
+            return;
+        }
+
+        const card = currentStreamCards[currentIndex];
+        document.getElementById('card-img').src = card.img;
+        document.getElementById('card-title').innerText = card.title;
+        document.getElementById('card-desc').innerText = card.desc;
+
+        const progress = (currentIndex / currentStreamCards.length) * 100;
+        document.getElementById('progress-fill').style.width = progress + '%';
+    }
+
+    function handleChoice(isLiked) {
+        const currentCard = currentStreamCards[currentIndex];
+        if (isLiked) {
+            clusterScores[currentCard.cluster] += 1;
+            totalLikes += 1;
+        }
+
+        currentIndex++;
+        showCard();
+    }
+
+    function renderResult() {
+        document.getElementById('screen-cards').classList.add('hidden');
+        document.getElementById('screen-result').classList.remove('hidden');
+        document.getElementById('sub-heading').innerText = "Assessment Results";
+
+        const resultCardBox = document.getElementById('result-card-box');
+        const degreeSection = document.getElementById('degree-section');
+
+        // CHANGE 2: Edge case when student passed on ALL options
+        if (totalLikes === 0) {
+            resultCardBox.classList.add('all-pass-box');
+            document.getElementById('res-cluster').innerText = "No Recommendation Possible";
+            document.getElementById('res-desc').innerText = "You have not liked any of the career options shown. No specific career path can be predicted for you. Please choose options that align with what you enjoy most!";
+            degreeSection.style.display = "none";
+            return;
+        }
+
+        // Standard result flow when at least 1 card is liked
+        resultCardBox.classList.remove('all-pass-box');
+        degreeSection.style.display = "block";
+
+        let topCluster = "";
+        let maxScore = -1;
+
+        for (const cluster in clusterScores) {
+            if (clusterScores[cluster] > maxScore) {
+                maxScore = clusterScores[cluster];
+                topCluster = cluster;
+            }
+        }
+
+        const winningSample = currentStreamCards.find(c => c.cluster === topCluster);
+
+        document.getElementById('res-cluster').innerText = topCluster;
+        document.getElementById('res-desc').innerText = `Your choices show a strong preference for ${topCluster}. You naturally align with the core tasks and environments in this domain.`;
+
+        const degreeList = document.getElementById('res-degrees');
+        degreeList.innerHTML = "";
+        winningSample.degrees.forEach(deg => {
+            const li = document.createElement('li');
+            li.innerText = deg;
+            degreeList.appendChild(li);
+        });
+    }
+</script>
+</body>
+</html>
